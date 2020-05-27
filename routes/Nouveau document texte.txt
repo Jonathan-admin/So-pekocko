@@ -1,0 +1,100 @@
+router.post('/:id/like', auth, likingAlgo, sauceController.likeOneSauce);
+
+exports.likeOneSauce = (req, res, next) => {
+    const sauceObjet = req.body.sauce;
+    Sauce.update({ _id: req.params.id },{$set: {
+        likes: sauceObjet.likes,
+        dislikes: sauceObjet.dislikes,
+        usersDisliked: sauceObjet.usersDisliked,
+        usersLiked: sauceObjet.usersLiked },
+        _id: req.params.id
+    })
+    .then(() => res.status(200).json({ message: req.body.message}))
+    .catch(error => res.status(400).json({ error: req.body.message }));
+};
+
+const Sauce = require('../models/Sauce');
+
+module.exports = (req,res,next) => {
+    let message = "";
+    Sauce.findOne({ _id: req.params.id })
+    .then(sauce => {
+        if(req.body.like==1 && sauce.usersLiked.indexOf(req.body.userId)<0) {
+            sauce.usersLiked.push(req.body.userId);
+            sauce.likes+=1;
+            message = "Vous aimez la sauce "+sauce.name+"!";
+        } else if (req.body.like==-1 && sauce.usersDisliked.indexOf(req.body.userId)<0) {
+            sauce.usersDisliked.push(req.body.userId);
+            sauce.dislikes+=1;
+            message = "Vous détestez la sauce "+sauce.name+"!";
+        } else {
+            sauce.usersLiked.forEach(element => {
+                if(element==req.body.userId) {
+                    sauce.likes-=1;
+                    sauce.usersLiked.splice(sauce.usersLiked.indexOf(req.body.userId),1);
+                }
+            });
+            sauce.usersDisliked.forEach(element => {
+                if(element==req.body.userId) {
+                    sauce.dislikes-=1;
+                    sauce.usersDisliked.splice(sauce.usersDisliked.indexOf(req.body.userId),1);
+                }
+            });
+            message = "Vous n'avez pas de préférence pour la sauce "+sauce.name+"!";
+        }
+        req.body.sauce = sauce;
+        req.body.message = message
+        next();
+    })
+    .catch(error => res.status(400).json({ error: "Une erreur est survenue lors de l'analyse des données!" }));
+}
+
+exports.likeOneSauce = (req, res, next) => {
+    const sauceObjet = req.body.sauce;
+    Sauce.update({ _id: req.params.id },{$set: {
+        likes: sauceObjet.likes,
+        dislikes: sauceObjet.dislikes,
+        usersDisliked: sauceObjet.usersDisliked,
+        usersLiked: sauceObjet.usersLiked },
+        _id: req.params.id
+    })
+    .then(() => res.status(200).json({ message: req.body.message}))
+    .catch(error => res.status(400).json({ error: req.body.message }));
+};
+
+var controleRegex = [/^[\wéèàêûçàôë]{2}[\w\s-'éèàêûçàôë]{0,48}$/i,
+                    /^[\wéèàêûçàôë]{2}[\w\s-'éèàêûçàôë]{0,40}$/i,
+                    /^[\wéèàêûçàôë]{2}[\w\s-éèàêûçàôë,?;.!:/'()]{0,253}$/i,
+                    /^[a-zA-Zéèàêûçàôë]{2}[a-zA-Z\s-éèàêûçàôë]{0,48}$/i,
+                    /^([1-9]|10)$/];
+
+module.exports = (req,res,next) => { 
+    const sauceObjet = JSON.parse(req.body.sauce);
+    let compteur = 0;
+    for (const key in sauceObjet) {
+        if (sauceObjet.hasOwnProperty(key)&&compteur<5) {
+            if(!controleRegex[compteur].test(sauceObjet[key])) {
+                return res.status(400).json({message:"Le champ "+key+ " ne semble pas valide !" +controleRegex[compteur]});  
+            }  
+        }
+        compteur++;      
+    }
+    next();
+}
+
+var fs = require('fs');
+const Sauce = require('../models/Sauce');
+
+module.exports = (req,res,next) => {
+    Sauce.findOne({ _id: req.params.id })
+    .then(sauce => {
+        if(req.file) {
+            const filename = sauce.imageUrl.split("/images/")[1];
+            fs.unlink('images/'+filename, function(err) {
+                if (err) throw err;
+            })
+        }
+        next();
+    })
+    .catch(error => res.status(500).json("poi"));
+} 

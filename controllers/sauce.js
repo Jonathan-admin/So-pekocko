@@ -8,8 +8,8 @@ exports.createSauce = (req,res,next) => {
         ...sauceObjet,
         likes: 0,
         dislikes: 0,
-        usersLiked: "[]",
-        usersDisLiked: "[]",
+        usersLiked: [],
+        usersDisliked: [],
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
     sauce.save().then(
@@ -46,7 +46,7 @@ exports.getOneSauce = (req, res, next) => {
       _id: req.params.id
     }).then(
       (sauce) => {
-        res.status(200).json({sauce});
+        res.status(200).json(sauce);
       }
     ).catch(
       (error) => {
@@ -55,6 +55,17 @@ exports.getOneSauce = (req, res, next) => {
         });
       }
     );
+};
+
+exports.modifyOneSauce = (req, res, next) => {
+    const sauceObject = req.file ?
+    {
+        ...JSON.parse(req.body.sauce),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : { ...req.body };
+    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+    .then(() => res.status(200).json({ message: "La sauce a bien été modifiée!"}))
+    .catch(error => res.status(400).json({ error }));
 };
 
 exports.deleteSauce = (req, res, next) => {
@@ -68,4 +79,17 @@ exports.deleteSauce = (req, res, next) => {
         });
       })
       .catch(error => res.status(500).json({ error }));
-  };
+};
+
+exports.likeOneSauce = (req, res, next) => {
+    const sauceObjet = req.body.sauce;
+    Sauce.update({ _id: req.params.id },{$set: {
+        likes: sauceObjet.likes,
+        dislikes: sauceObjet.dislikes,
+        usersDisliked: sauceObjet.usersDisliked,
+        usersLiked: sauceObjet.usersLiked },
+        _id: req.params.id
+    })
+    .then(() => res.status(200).json({ message: req.body.message}))
+    .catch(error => res.status(400).json({ error: req.body.message }));
+};
