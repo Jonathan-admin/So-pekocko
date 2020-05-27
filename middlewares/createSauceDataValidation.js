@@ -6,7 +6,7 @@ const controleRegex = [/^[\wéèàêûçàôë]{2}[\w\s-'éèàêûçàôë]{0,4
 
 module.exports = (req,res,next) => {
     
-    sauceObjet = { ...req.body.sauce };
+    sauceObjet = JSON.parse(req.body.sauce );
     let compteur = 0;
     for (const key in sauceObjet) {
         if (sauceObjet.hasOwnProperty(key)&&compteur<5) {
@@ -16,6 +16,7 @@ module.exports = (req,res,next) => {
         }
         compteur++;      
     }
+    next();
     
     
 }

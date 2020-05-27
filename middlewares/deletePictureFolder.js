@@ -6,12 +6,12 @@ module.exports = (req,res,next) => {
     .then(sauce => {
         if(req.file) {
             const filename = sauce.imageUrl.split("/images/")[1];
-            fs.unlink('images/'+filename, function(err) {
-                if (err) throw err;
+            fs.unlink('images/'+filename, function(error) {
+                if (error) throw error;
             })
         }
         next();
     })
-    .catch(error => res.status(500).json("poi"));
+    .catch(error => res.status(500).json({message: error}));
 } 
         
