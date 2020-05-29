@@ -5,12 +5,12 @@ module.exports = (req,res,next) => {
         const token = req.headers.authorization.split(" ")[1];
         const decodedToken = jsonWebToken.verify(token,'RANDOM_TOKEN_SECRET');
         const userId = decodedToken.userId;
-        if(req.body.userId&&req.body.userId!==userId) {
-            throw "Non authentifié!";
-        } else {
+        if(req.body.sauce.userId!==userId) {
             next();
+        } else {
+            res.status(400).json({error: 'Vous n\'êtes pas autorisé à liker ou disliker votre sauce!'});
         }
     } catch {
-        res.status(401).json({error: 'Invalid request!'});
+        res.status(401).json({error: new Error('Invalid request!')});
     }
 }

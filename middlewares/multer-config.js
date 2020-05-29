@@ -13,7 +13,9 @@ const storage = multer.diskStorage({
     filename: (req, file, callback) => {
       const name = file.originalname.split(".")[0];
       const extension = MIME_TYPES[file.mimetype];
-      callback(null, name +"_"+Date.now()+"."+extension);
+      const finalFilename = name +"_"+Date.now()+"."+extension;
+      req.body.finalFileName = finalFilename;
+      callback(null, finalFilename);
     }
 });
 
