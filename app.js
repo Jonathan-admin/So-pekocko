@@ -21,6 +21,7 @@ mongoose.connect('mongodb+srv://jlaubron:10Km@pieds@cluster0-sph2n.mongodb.net/t
    .then(() => console.log('Connexion à MongoDB réussie !'))
    .catch(() => console.log('Connexion à MongoDB échouée !'));
 
+
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', sauceRoutes);

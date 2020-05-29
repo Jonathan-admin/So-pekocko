@@ -12,19 +12,18 @@ exports.createSauce = (req,res,next) => {
         usersDisliked: [],
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
-    sauce.save().then(
-        () => {
-          res.status(201).json({
-            message: 'La sauce a été créée avec succès!'
-          });
-        }
-    ).catch(
-        (error) => {
-        res.status(400).json({
-            message: error
-        });
-        }
-    );
+    if(!req.body.errorMessage) {
+        sauce.save()
+        .then(() => { res.status(201).json({ message: 'La sauce a été créée avec succès!' }); })
+        .catch( error => { 
+            if(error.message.indexOf("to be unique")>0) {
+                req.body.errorMessage = "Le nom de cette sauce existe déjà!";
+            }
+            next();
+        })
+    } else {
+        next();
+    }
 };
 
 exports.getAllSauces = (req,res,next) => {
@@ -63,9 +62,24 @@ exports.modifyOneSauce = (req, res, next) => {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
-    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-    .then(() => res.status(200).json({ message: "La sauce a bien été modifiée!"}))
-    .catch(error => res.status(400).json({ error }));
+    if(!req.body.errorMessage) {
+        Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+        .then(() => {
+            if(!req.file) {
+                res.status(200).json({ message: "La sauce a bien été modifiée!"})
+            } else {
+                next();
+            }
+        })
+        .catch( error => { 
+            if(error.message.indexOf("duplicate key")>0) {
+                req.body.errorMessage = "Le nom de cette sauce existe déjà!";
+            }
+            next();
+        })
+    } else {
+        next();
+    }
 };
 
 exports.deleteSauce = (req, res, next) => {

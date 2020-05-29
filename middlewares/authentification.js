@@ -11,6 +11,6 @@ module.exports = (req,res,next) => {
             next();
         }
     } catch {
-        res.status(401).json(req.headers.authentification.split(" ")[1]);
+        res.status(401).json({error: 'Invalid request!'});
     }
 }
