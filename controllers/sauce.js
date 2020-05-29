@@ -63,6 +63,7 @@ exports.modifyOneSauce = (req, res, next) => {
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
     if(!req.body.errorMessage) {
+        console.log("ok");
         Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
         .then(() => {
             if(!req.file) {

@@ -6,13 +6,25 @@ const MIME_TYPES = {
     "image/png": "png"
 };
 
-
 module.exports = (req,res,next) => {
-    fs.unlink('images/'+req.body.finalFileName, function(err) {
-        if (err) {
-            console.log("ok");
-            res.status(500).json({message: err});
+    if(!req.body.errorMessage) {
+        if(req.body.oldPictureName) {
+            deleteFile(req.body.oldPictureName,res);
         }
-    });
-    res.status(400).json({message: req.body.errorMessage});
+        res.status(200).json({message: "La sauce a bien été modifiée!"});
+    } else {
+        deleteFile(req.body.finalFileName,res);
+        res.status(400).json({message: req.body.errorMessage});
+    }
+}
+
+const deleteFile = (file,res) => {
+    if(file) {
+        fs.unlink('images/'+file, function(err) {
+            if (err) { 
+                console.log(file);
+                res.status(500).json({message: err});
+            };
+        });
+    }
 }

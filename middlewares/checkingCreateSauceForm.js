@@ -12,6 +12,7 @@ module.exports = (req,res,next) => {
     } else {
         sauceObjet = { ...req.body };
     }
+    console.log(req.body.sauce);
     for (const key in sauceObjet) {
         if (sauceObjet.hasOwnProperty(key)&&compteur<5) {
             if(!controleRegex[compteur].test(sauceObjet[key])) {
