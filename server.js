@@ -1,5 +1,6 @@
 const http = require('http');
 const app = require('./app');
+const mongoose = require('mongoose');
 
 const normalizePort = val => {
   const port = parseInt(val, 10);
@@ -45,6 +46,5 @@ server.on('listening', () => {
 });
 
 server.listen(port);
-
 
 

@@ -1,8 +1,8 @@
 
-const controleRegex = [/^[\wéèàêûçàôë]{2}[\w\s-'éèàêûçàôë]{0,48}$/i,
-                    /^[\wéèàêûçàôë]{2}[\w\s-'éèàêûçàôë]{0,40}$/i,
-                    /^[\wéèàêûçàôë]{2}[\w\s-éèàêûçàôë,?;.!:/'()]{0,253}$/i,
-                    /^[a-zA-Zéèàêûçàôë]{2}[a-zA-Z\s-éèàêûçàôë]{0,48}$/i,
+const controleRegex = [/^[\wéèàêûçàôë]{2}[\w\s-'éèàêûñçàôë]{0,48}$/i,
+                    /^[\wéèàêûçàôë]{2}[\w\s-'éèàêûçñàôë]{0,40}$/i,
+                    /^[\wéèàêûçàôë]{2}[\w\s-éèàêûçàñôë,?;.!:/"'()]{0,1098}$/i,
+                    /^[a-zA-Zéèàêûçàôë]{2}[a-zA-Z\s-éèàêñûçàôë]{0,48}$/i,
                     /^([1-9]|10)$/];
 
 module.exports = (req,res,next) => {
@@ -12,7 +12,6 @@ module.exports = (req,res,next) => {
     } else {
         sauceObjet = { ...req.body };
     }
-    console.log(req.body.sauce);
     for (const key in sauceObjet) {
         if (sauceObjet.hasOwnProperty(key)&&compteur<5) {
             if(!controleRegex[compteur].test(sauceObjet[key])) {
@@ -23,6 +22,4 @@ module.exports = (req,res,next) => {
         compteur++;      
     }
     next();
-    
-    
 }
