@@ -98,7 +98,7 @@ exports.deleteSauce = (req, res, next) => {
 
 exports.likeOneSauce = (req, res, next) => {
     const sauceObjet = req.body.sauce;
-    Sauce.update({ _id: req.params.id },{$set: {
+    Sauce.updateOne({ _id: req.params.id },{$set: {
         likes: sauceObjet.likes,
         dislikes: sauceObjet.dislikes,
         usersDisliked: sauceObjet.usersDisliked,

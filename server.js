@@ -1,48 +1,25 @@
 const http = require('http');
 const app = require('./app');
-const mongoose = require('mongoose');
 
-const normalizePort = val => {
-  const port = parseInt(val, 10);
+const port = 3000;
 
-  if (isNaN(port)) {
-    return val;
-  }
-  if (port >= 0) {
-    return port;
-  }
-  return false;
-};
-const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 const errorHandler = error => {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
-  const address = server.address();
-  const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges.');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use.');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+    console.log(error+": Une erreur est survenue au démarrage du server.");
 };
 
 const server = http.createServer(app);
 
 server.on('error', errorHandler);
 server.on('listening', () => {
-  const address = server.address();
-  const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
-  console.log('Listening on ' + bind);
+    console.log('En attente d\'une communication réseau sur le port '+port);
+});
+server.on('request', () => {
+    let objDate = new Date();
+    console.log("Une requête provenant de l'application a bien été reçue ! ("
+    +objDate.getDate()+"/"+(objDate.getMonth()+1)+"/"+objDate.getFullYear()+" à "
+    +objDate.getHours()+":"+objDate.getMinutes()+":"+objDate.getSeconds()+")");
 });
 
 server.listen(port);

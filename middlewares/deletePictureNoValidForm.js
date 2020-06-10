@@ -1,11 +1,5 @@
 var fs = require('fs');
 
-const MIME_TYPES = {
-    "image/jpg": "jpg",
-    "image/jpeg": "jpeg",
-    "image/png": "png"
-};
-
 module.exports = (req,res,next) => {
     if(!req.body.errorMessage) {
         if(req.body.oldPictureName) {

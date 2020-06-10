@@ -3,7 +3,9 @@ const multer = require('multer');
 const MIME_TYPES = {
     "image/jpg": "jpg",
     "image/jpeg": "jpeg",
-    "image/png": "png"
+    "image/png": "png",
+    "image/webp": "webp",
+    "image/gif": "gif"
 };
 
 const storage = multer.diskStorage({
@@ -13,6 +15,7 @@ const storage = multer.diskStorage({
     filename: (req, file, callback) => {
       const name = file.originalname.split(".")[0];
       const extension = MIME_TYPES[file.mimetype];
+      mimeTypeIsValid(extension,req);
       const finalFilename = name +"_"+Date.now()+"."+extension;
       req.body.finalFileName = finalFilename;
       callback(null, finalFilename);
@@ -20,3 +23,12 @@ const storage = multer.diskStorage({
 });
 
 module.exports = multer({storage: storage}).single('image');
+
+const mimeTypeIsValid = (ext,req) => {
+    if(ext!="jpg"||ext!="jpeg"||ext!="png"||ext!="webp"||ext!="gif") {
+        req.body.errorMessage = "Le format de l'image n'est pas valide!";
+    }
+}
+
+
+

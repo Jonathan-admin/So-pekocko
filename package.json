@@ -1,12 +1,12 @@
 {
-  "name": "back-end",
+  "name": "piquante",
   "version": "1.0.0",
   "description": "Backend du site la \"Piquante\"",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Jonathan LAUBRON",
   "license": "ISC",
   "dependencies": {
     "app-root-path": "^3.0.0",
