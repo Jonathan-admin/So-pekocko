@@ -9,11 +9,12 @@ const morgan = require('morgan');
 const winston = require('./monitoring/config/winston');
 const helmet = require('helmet');
 
-mongoose.connect('mongodb+srv://jlaubron:50Km@pieds@cluster0-sph2n.mongodb.net/so-pekocko?retryWrites=true&w=majority', 
-    { useNewUrlParser: true,
-    useUnifiedTopology: true })
-   .then(() => console.log('Connexion à MongoDB réussie !'))
-   .catch(() => console.log('Connexion à MongoDB échouée !'));
+mongoose.connect('mongodb+srv://jlaubron:50Km@pieds@cluster0-sph2n.mongodb.net/so-pekocko?retryWrites=true&w=majority', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true 
+})
+.then(() => console.log('Connexion à MongoDB réussie !'))
+.catch(() => console.log('Connexion à MongoDB échouée !'));
 mongoose.set('useCreateIndex', true);
 
 app.use(morgan('combined', { stream: winston.stream }));

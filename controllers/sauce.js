@@ -14,8 +14,10 @@ exports.createSauce = (req,res,next) => {
     });
     if(!req.body.errorMessage) {
         sauce.save()
-        .then(() => { res.status(201).json({ message: 'La sauce a été créée avec succès!' }); })
-        .catch( error => { 
+        .then(() => { 
+            res.status(201).json({ message: 'La sauce a été créée avec succès!' }); 
+        })
+        .catch(error => { 
             if(error.message.indexOf("to be unique")>0) {
                 req.body.errorMessage = "Le nom de cette sauce existe déjà!";
             }
@@ -27,33 +29,23 @@ exports.createSauce = (req,res,next) => {
 };
 
 exports.getAllSauces = (req,res,next) => {
-    Sauce.find().then(
-        (sauces) => {
-            res.status(200).json(sauces);
-        }
-    ).catch(
-        (error) => {
-            res.status(400).json({
-                message: error
-            });
-        }
-    );
+    Sauce.find()
+    .then(sauces => {
+        res.status(200).json(sauces);
+    })
+    .catch(error => {
+        res.status(400).json({ message: error });
+    });
 };
 
 exports.getOneSauce = (req, res, next) => {
-    Sauce.findOne({
-      _id: req.params.id
-    }).then(
-      (sauce) => {
+    Sauce.findOne({_id: req.params.id})
+    .then(sauce => {
         res.status(200).json(sauce);
-      }
-    ).catch(
-      (error) => {
-        res.status(404).json({
-          error: error
-        });
-      }
-    );
+    })
+    .catch( error => {
+        res.status(404).json({ error: error });
+    });
 };
 
 exports.modifyOneSauce = (req, res, next) => {
@@ -63,7 +55,6 @@ exports.modifyOneSauce = (req, res, next) => {
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
     if(!req.body.errorMessage) {
-        console.log("ok");
         Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
         .then(() => {
             if(!req.file) {
@@ -72,7 +63,7 @@ exports.modifyOneSauce = (req, res, next) => {
                 next();
             }
         })
-        .catch( error => { 
+        .catch(error => { 
             if(error.message.indexOf("duplicate key")>0) {
                 req.body.errorMessage = "Le nom de cette sauce existe déjà!";
             }
@@ -85,10 +76,10 @@ exports.modifyOneSauce = (req, res, next) => {
 
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
-      .then(sauce => {
+    .then(sauce => {
         const filename = sauce.imageUrl.split('/images/')[1];
         fs.unlink(`images/${filename}`, () => {
-          Sauce.deleteOne({ _id: req.params.id })
+            Sauce.deleteOne({ _id: req.params.id })
             .then(() => res.status(200).json({ message: 'La sauce a bien été supprimée !'}))
             .catch(error => res.status(400).json({ error }));
         });
