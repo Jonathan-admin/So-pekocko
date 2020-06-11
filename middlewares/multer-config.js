@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
 module.exports = multer({storage: storage}).single('image');
 
 const mimeTypeIsValid = (ext,req) => {
-    if(ext!="jpg"||ext!="jpeg"||ext!="png"||ext!="webp"||ext!="gif") {
+    if(ext!="jpg"&&ext!="jpeg"&&ext!="png"&&ext!="webp"&&ext!="gif") {
         req.body.errorMessage = "Le format de l'image n'est pas valide!";
     }
 }
