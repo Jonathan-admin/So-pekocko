@@ -11,8 +11,8 @@ From your download folder, open a terminal console to run ng serve to access the
 
 To install the API, please perform the following procedure:
 1. Clone this folder in a directory of your choice from the *[address of the repository](https://github.com/Jonathan-admin/So-Pekocko.git)*.
-2. In your preferred text editor, open a console terminal and execute the **npm install** command to install all the modules necessary for the application to work.
-3. Finally, start the server with the node server command. The API should be reachable and usable from the url address of the *[So-pekocko web application](http://localhost:4200/)* (frontend application already developed by another team).
+2. In your preferred text editor, open a console terminal and execute the `npm install` command to install all the modules necessary for the application to work.
+3. Finally, start the server with the `node server` command. The API should be reachable and usable from the url address of the *[So-pekocko web application](http://localhost:4200/)* (frontend application already developed by another team).
 
 
 ## Installation for UNIX systems
@@ -21,11 +21,11 @@ The procedure is the same but some additional actions are necessary.
 
 On Linux, the bcrypt v4 version already installed seems to pose compatibility problems and prevents the application from working correctly. It is very likely that you will encounter the same problem on MAC OS.
 To this kind of problem:
-* Update the node version to version 12 or higher and check that it is installed correctly: 
+* Update the node version to **version 12 or higher** and check that it is installed correctly: 
   * `wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash -`
   * `sudo apt install -y nodejs`            (ubuntu commands only)
   * `node -v`
-* Manually remove bcrypt from the package.json file. Then, execute the `npm install` command to install all the dependencies necessary for the operation of the application.
+* **Manually remove bcrypt from the package.json file.** Then, execute the `npm install` command to install all the dependencies necessary for the operation of the application.
 * To finish, run `npm install --save bcript` to get the latest version (v5) and `node server` to start backend server.
   
 ## So-pekocko API operations
