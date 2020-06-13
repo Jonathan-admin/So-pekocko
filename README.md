@@ -1,6 +1,6 @@
-# So-Pekocko
+# So-Pekocko's web application
 
-**So-pekocko** is an application that lets you **view, create and rate sauces uploaded by other users**. This github repository represents the creation of a **private API** whose purpose will be to manipulate the information of the sauces or to store them according to the authentication of the user.
+**Piquante** is an So-Pekocko's application that lets you **view, create and rate sauces uploaded by other users**. This github repository represents the creation of a **private API** whose purpose will be to manipulate the information of the sauces or to store them according to the authentication of the user.
 
 ## Requirement
 
@@ -28,7 +28,7 @@ To this kind of problem:
 * **Manually remove bcrypt from the package.json file.** Then, execute the `npm install` command to install all the dependencies necessary for the operation of the application.
 * To finish, run `npm install --save bcript` to get the latest version (v5) and `node server` to start backend server.
   
-## So-pekocko API operations
+## Piquante API operations
 
 This API allows authenticated users to consult and record the sauces of other users and manage their own. These features will be implemented from the frontend application. She will be in charge of contacting the API to perform user actions and all this thanks to HTTP requests. Below you will find the routes used to carry out these operations.
 * *Subscribe to So-Pekocko - POST* => [http://localhost:3000/api/auth/signup](http://localhost:3000/api/auth/signup)
